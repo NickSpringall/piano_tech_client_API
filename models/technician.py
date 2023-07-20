@@ -4,7 +4,7 @@ from marshmallow import fields
 class Technician(db.Model):
     __tablename__ = "technicians"
 
-    id = db.column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
     address = db.Column(db.String(100))
