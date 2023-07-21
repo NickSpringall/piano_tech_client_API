@@ -11,11 +11,10 @@ class Technician(db.Model):
     phone = db.Column(db.String(30))
     email = db.Column(db.String(100))
     password = db.Column(db.String, nullable=False)
-    is_admin = db.Column(db.Boolean, default=True)
 
 class TechnicianSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password', 'is_admin')
+        fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password')
     
 technician_schema = TechnicianSchema()
 technicians_schema = TechnicianSchema(many=True)
