@@ -9,11 +9,13 @@ class Client(db.Model):
     phone = db.Column(db.String(30))
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String, nullable=False)
+    
+    technician_id = db.Column(db.Integer, db.ForeignKey('technicians.id'))
 
     technician = db.relationship('technicians', back_populates='clients', cascade='all, delete') 
 
 class ClientSchema(ma.Schema):
-    technician = fields.List(fields.Nested('TechnicianSchema', exclude=['password']))
+    technician = fields.Nested('TechnicianSchema', exclude=['password', 'clients'])
 
     class Meta:
         fields = ('id', 'address', 'phone', 'email', 'password', 'technician')

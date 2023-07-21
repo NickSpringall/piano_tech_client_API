@@ -1,6 +1,7 @@
 from flask import Blueprint
 from init import db, bcrypt
 from models.technician import Technician
+from models.client import Client
 
 
 db_commands = Blueprint('db', __name__)

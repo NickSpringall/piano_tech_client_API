@@ -12,7 +12,12 @@ class Technician(db.Model):
     email = db.Column(db.String(100))
     password = db.Column(db.String, nullable=False)
 
+    clients = db.relationship('Client', back_populates='technicians', cascade='all, delete')
+
+
 class TechnicianSchema(ma.Schema):
+    clients = fields.List(fields.Nested('ClientsSchema'), exclude=['password', 'technician'])
+
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password')
     
