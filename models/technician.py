@@ -21,5 +21,5 @@ class TechnicianSchema(ma.Schema):
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password')
     
-technician_schema = TechnicianSchema()
-technicians_schema = TechnicianSchema(many=True)
+technician_schema = TechnicianSchema(exclude=['password'])
+technicians_schema = TechnicianSchema(many=True, exclude=['password'])
