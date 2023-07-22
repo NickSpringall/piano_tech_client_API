@@ -12,7 +12,7 @@ class Technician(db.Model):
     email = db.Column(db.String(100))
     password = db.Column(db.String, nullable=False)
 
-    clients = db.relationship('Client', back_populates='technicians', cascade='all, delete')
+    clients = db.relationship('Client', back_populates='technician', cascade='all, delete')
 
 
 class TechnicianSchema(ma.Schema):

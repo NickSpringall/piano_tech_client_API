@@ -15,3 +15,51 @@ def create_db():
 def drop_db():
     db.drop_all()
     print('Tables Dropped')
+
+@db_commands.cli.command('seed')
+def seed_db():
+    technicians = [
+        Technician(
+            first_name='James',
+            last_name='Smith',
+            address= '5 smith st, smithville',
+            phone= '0483 293 399',
+            email='james_smith@email.com',
+            password=bcrypt.generate_password_hash('jamessmith').decode('utf-8')
+        ),
+        Technician(
+            first_name='Sally',
+            last_name='Ford',
+            address='20 street st, streetville',
+            phone= '0495 438 393',
+            email='sally@email.com',
+            password=bcrypt.generate_password_hash('sallyford').decode('utf-8')
+        )
+    ]
+
+    db.session.add_all(technicians)
+    
+    clients = [
+        Client(
+            name='Toorak College',
+            address='6 Toorak rd, Toorak',
+            phone='03 9374 3733',
+            email='info@toorakcollege.com',
+            password=bcrypt.generate_password_hash('toorak').decode('utf-8'),
+            technician=technicians[0]
+        ),
+        Client(
+        name='Elsternwick State School',
+        address='4390 St Kilda rd, Elsternwick',
+        phone='03 9283 3933',
+        email='info@ess.gov.edu.au',
+        password=bcrypt.generate_password_hash('ess').decode('utf-8'),
+        technician=technicians[0]
+        )
+    ]
+
+    db.session.add_all(clients)
+
+    db.session.commit()
+
+    print('Tables Seeded')
