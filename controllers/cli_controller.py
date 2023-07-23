@@ -2,6 +2,8 @@ from flask import Blueprint
 from init import db, bcrypt
 from models.technician import Technician
 from models.client import Client
+from models.country import Country
+from models.make import Make
 
 
 db_commands = Blueprint('db', __name__)
@@ -59,6 +61,39 @@ def seed_db():
     ]
 
     db.session.add_all(clients)
+
+    countries = [
+        Country(
+        name = 'Japan'
+        ),
+        Country(
+        name = 'China'
+        ),
+        Country(
+        name = 'USA'
+        ),
+        Country(
+        name = 'Indonesia'
+        ),
+        Country(
+        name = 'Germany'
+        )
+    ]
+
+    db.session.add_all(countries)
+
+    makes = [
+        Make(
+        name = 'Yamaha',
+        country = countries[0]
+        ),
+        Make(
+        name = 'Steinway',
+        country = countries[4]
+        )
+    ]
+
+    db.session.add_all(makes)
 
     db.session.commit()
 

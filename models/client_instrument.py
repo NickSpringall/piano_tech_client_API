@@ -4,7 +4,7 @@ from marshmallow import fields
 class ClientInstrument(db.Model):
     __tablename__ = 'client_instruments'
 
-    id = db.Column(db.Integer, prumary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     room = db.Column(db.String(100))
 
     model_id = db.Column(db.Integer, db.ForeignKey('models.id'))
