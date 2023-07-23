@@ -8,7 +8,7 @@ class Country(db.Model):
     name = db.Column(db.String(50))
 
     makes = db.relationship('Make', back_populates='country', cascade='all, delete')
-    models = db.relationship0('Model', back_populates='models', cascade='all, delete')
+    models = db.relationship('Model', back_populates='manufacture_country', cascade='all, delete')
 
 class CountrySchema(ma.Schema):
     makes = fields.List(fields.Nested('MakesSchema'))

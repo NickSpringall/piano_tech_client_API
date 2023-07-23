@@ -4,12 +4,12 @@ from marshmallow import fields
 class Model(db.Model):
     __tablename__ = 'models'
 
-    id = db.Column(db.integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
-    type_id = db.Column(db.integer, db.ForeignKey, 'types.id')
-    make_id = db.Column(db.Integer, db.ForeignKey, 'makes.id')
-    manufacture_country_id = db.Column(db.Integer, db.ForeignKey, 'coutries.id')
+    type_id = db.Column(db.Integer, db.ForeignKey('types.id'))
+    make_id = db.Column(db.Integer, db.ForeignKey('makes.id'))
+    manufacture_country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
 
     type = db.relationship('Type', back_populates='models', cascade='all, delete')
     make = db.relationship('Make', back_populates='models', cascade='all, delete')

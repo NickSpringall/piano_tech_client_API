@@ -4,6 +4,8 @@ from models.technician import Technician
 from models.client import Client
 from models.country import Country
 from models.make import Make
+from models.type import Type
+from models.model import Model
 
 
 db_commands = Blueprint('db', __name__)
@@ -94,6 +96,16 @@ def seed_db():
     ]
 
     db.session.add_all(makes)
+
+    types = [
+        Type(
+        name = 'upright'   
+        ),
+        Type(
+        name = 'grand'
+        )
+    ]
+    db.session.add_all(types)
 
     db.session.commit()
 
