@@ -19,6 +19,4 @@ def technician_clients(id):
     technician = db.session.scalar(stmt)
     if technician:
         clients = Client.query.filter_by(technician_id=id)
-        
-        db.select(Client).filter_by(technician_id=id)
         return clients_schema.dump(clients)

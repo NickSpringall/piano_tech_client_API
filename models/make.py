@@ -1,4 +1,5 @@
 from init import db, ma 
+from marshmallow import fields
 
 class Make(db.Model):
     __tablename__ = 'makes'
@@ -9,3 +10,11 @@ class Make(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
     country = db.relationship('Country', back_populates='makes', cascade='all, delete')
 
+class MakeSchema(ma.Schema):
+    country = fields.Nested('CountrySchema')
+
+    class Meta:
+        fields = ('id', 'name', 'country')
+
+make_schema = MakeSchema
+makes_schema = MakeSchema(many=True)
