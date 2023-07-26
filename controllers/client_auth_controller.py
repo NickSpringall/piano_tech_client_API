@@ -6,9 +6,9 @@ from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
 
-client_auth_bp = Blueprint('auth', __name__, url_prefix='/auth_client')
-
-@client_auth_bp('/login', methods=['POST'])
+client_auth_bp = Blueprint('auth_client', __name__, url_prefix='/auth_client')
+ 
+@client_auth_bp.route('/login', methods=['POST'])
 def auth_client_login():
     body_data = request.get_json()
 
@@ -16,7 +16,7 @@ def auth_client_login():
     client = db.session.scalar(stmt)
     if client:
         if bcrypt.check_password_hash(client.password, body_data.get('password')):
-            token = create_access_token(identity=('client' + str(client.id)), exipres_delta=timedelta(days=1))
+            token = create_access_token(identity=('client' + str(client.id)), expires_delta=timedelta(days=1))
             return {'email': client.email, 'token': token}
         else:
             return {'error': 'Incorrect password'}
