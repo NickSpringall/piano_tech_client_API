@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from controllers.cli_controller import db_commands
 from controllers.client_controller import client_bp
 from controllers.technician_controller import technician_bp
-from controllers.auth_controller import auth_bp
+from controllers.tech_auth_controller import auth_bp
 
 def create_app():
     app = Flask (__name__)

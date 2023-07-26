@@ -23,11 +23,18 @@ def create_technician():
         email=body_data.get('email'),
         password=bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
     )
-    db.session.add(technician)
-    db.session.commit()
+    stmt = db.select(Technician). filter_by(email=technician.email)
+    tech_exists = db.session.scalar(stmt)
 
-    return technician_schema.dump(technician), 201
+    if tech_exists:
+        return {"error": "email already in use"}, 401
+        
+    else:   
+        db.session.add(technician)
+        db.session.commit()
 
+        return technician_schema.dump(technician), 201
+ 
 
 @technician_bp.route ('/<int:id>/clients')
 def technician_clients(id):
