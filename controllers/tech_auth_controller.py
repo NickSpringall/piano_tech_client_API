@@ -33,7 +33,7 @@ def auth_tech_login():
     technician = db.session.scalar(stmt)
     if technician:
         if bcrypt.check_password_hash(technician.password, body_data.get('password')):
-            token = create_access_token(identity=str(technician.id), expires_delta=timedelta(days=1))
+            token = create_access_token(identity=('technician' + str(technician.id)), expires_delta=timedelta(days=1))
             return {'email': technician.email, 'token': token}
         else: 
             return {'error': 'Incorrect password'}
