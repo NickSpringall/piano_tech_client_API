@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from controllers.cli_controller import db_commands
 from controllers.client_controller import client_bp
 from controllers.technician_controller import technician_bp
+from controllers.auth_controller import auth_bp
 
 def create_app():
     app = Flask (__name__)
@@ -24,6 +25,7 @@ def create_app():
     app.register_blueprint(db_commands)
     app.register_blueprint(client_bp)
     app.register_blueprint(technician_bp)
+    app.register_blueprint(auth_bp)
 
     return app
     
