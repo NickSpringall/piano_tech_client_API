@@ -8,8 +8,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 technician_bp = Blueprint('technicians', __name__, url_prefix='/technicians')
 
 @technician_bp.route ('/')
-# @jwt_required
-# @check_if_technician
+@jwt_required()
+@check_if_technician
 def get_all_technicians():
     stmt = db.select(Technician).order_by(Technician.first_name)
     technicians = db.session.scalars(stmt)
