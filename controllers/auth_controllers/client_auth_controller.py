@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from init import db, bcrypt
-from models.technician import Technician, technician_schema, technicians_schema
-from models.client import Client, client_schema, clients_schema
+from models.client import Client
 from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta

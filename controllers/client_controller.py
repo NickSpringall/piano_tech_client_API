@@ -1,9 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.client import Client, clients_schema, client_schema
 from models.technician import Technician
 from init import db, ma, bcrypt
-import functools
+from decorators import check_if_technician
 
 
 client_bp = Blueprint('clients', __name__, url_prefix='/clients')
@@ -15,22 +15,6 @@ def get_all_clients():
     clients = db.session.scalars(stmt)
     return clients_schema.dump(clients)
 
-
-# def check_if_technician(user_id):
-#     if 'technician' in user_id:
-#         return 'user is technician'
-#     else: 
-#         return
-
-def check_if_technician(fn):
-    @functools.wraps(fn)
-    def wrapper():
-        user = get_jwt_identity()
-        if 'technician' in user:
-            return (fn())
-        else:
-            return {"error": "unauthorised user"}, 401
-    return wrapper
         
 @client_bp.route ('/', methods = ['POST'])
 @jwt_required()

@@ -16,7 +16,7 @@ class Technician(db.Model):
 
 
 class TechnicianSchema(ma.Schema):
-    clients = fields.List(fields.Nested('ClientsSchema'), exclude=['password', 'technician'])
+    clients = fields.List(fields.Nested('ClientSchema'), exclude=['password', 'technician'])
 
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password', 'clients')
