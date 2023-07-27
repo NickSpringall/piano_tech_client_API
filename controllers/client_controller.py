@@ -1,19 +1,29 @@
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 from models.client import Client, clients_schema, client_schema
-from models.technician import Technician
 from init import db, ma, bcrypt
-from decorators import check_if_technician
+from decorators import check_if_technician, check_if_technician_or_logged_in_client
 
 
 client_bp = Blueprint('clients', __name__, url_prefix='/clients')
 
 
 @client_bp.route ('/')
+@jwt_required()
+@check_if_technician
 def get_all_clients():
     stmt = db.select(Client).order_by(Client.name)
     clients = db.session.scalars(stmt)
     return clients_schema.dump(clients)
+
+
+@client_bp.route ('/<int:id>')
+@jwt_required()
+@check_if_technician_or_logged_in_client
+def get_single_client(id):
+    stmt = db.select(Client).filter_by(id=id)
+    client = db.session.scalar(stmt)
+    return client_schema.dump(client)
 
         
 @client_bp.route ('/', methods = ['POST'])
@@ -34,6 +44,7 @@ def create_client():
 
     return client_schema.dump(client), 201
 
+
 @client_bp.route ('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
 @check_if_technician
@@ -52,7 +63,8 @@ def update_client_details(id):
         except: ValueError
     else:
         return {'error': f'no client found with id {id}'}, 404
-    
+
+
 @client_bp.route ('/<int:id>', methods = ['DELETE'])
 @jwt_required()
 @check_if_technician
