@@ -5,7 +5,7 @@ class Technician(db.Model):
     __tablename__ = "technicians"
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100))
+    first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100))
     address = db.Column(db.String(100))
     phone = db.Column(db.String(30))
@@ -16,7 +16,7 @@ class Technician(db.Model):
 
 
 class TechnicianSchema(ma.Schema):
-    clients = fields.List(fields.Nested('ClientSchema'), exclude=['password', 'technician'])
+    clients = fields.List(fields.Nested('ClientSchema', exclude=['password', 'technician']))
 
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password', 'clients')
