@@ -71,8 +71,24 @@ def update_technician_details(id):
         try:
             technician.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         except: ValueError
-        
+
         db.session.commit()
         return technician_schema.dump(technician)
+    else:
+        return {'error': f'no technician found with id {id}'}, 404
+    
+@technician_bp.route ('<int:id>', methods = ['DELETE'])
+@jwt_required()
+@check_if_technician
+def delete_technician(id):
+    stmt = db.select(Technician).filter_by(id=id)
+    technician = db.session.scalar(stmt)
+    if technician:
+        if ("technician" + str(technician.id)) != get_jwt_identity():
+            return {'error': 'Technicians can only delete their own information'}, 403
+        else:
+            db.session.delete(technician)
+            db.session.commit()
+            return {'message': f'technician {technician.first_name} {technician.last_name} successfully deleted'}, 200
     else:
         return {'error': f'no technician found with id {id}'}, 404
