@@ -154,6 +154,61 @@ def seed_db():
     ]
     db.session.add_all(models)
 
+    finishes = [
+        Finish(
+        name = 'gloss polyester'
+        ),
+        Finish(
+        name = 'matte lacquer'
+        ),
+        Finish(
+        name = 'french polish'
+        ),
+        Finish(
+        name = 'hand rubbed polyester'
+        )
+    ]
+    db.session.add_all(finishes)
+
+    client_instruments = [
+        ClientInstrument(
+        room = 'music room',
+        model = models[2],
+        client = clients[0],
+        finish = finishes[0],
+        colour = colours[0]
+        ),
+        ClientInstrument(
+        room = 'music room',
+        model = models[2],
+        client = clients[0],
+        finish = finishes[0],
+        colour = colours[0]
+        ),
+        ClientInstrument(
+        room = 'teaching studio 1',
+        model = models[2],
+        client = clients[0],
+        finish = finishes[1],
+        colour = colours[3]
+        ),
+        ClientInstrument(
+        room = 'drama room',
+        model = models[0],
+        client = clients[1],
+        finish = finishes[3],
+        colour = colours[0]
+        ),
+        ClientInstrument(
+        room = 'theatre',
+        model = models[3],
+        client = clients[1],
+        finish = finishes[1],
+        colour = colours[1]
+        )
+    ]
+    db.session.add_all(client_instruments)
+
     db.session.commit()
 
     print('Tables Seeded')
