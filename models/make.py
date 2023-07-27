@@ -11,6 +11,7 @@ class Make(db.Model):
     country = db.relationship('Country', back_populates='makes', cascade='all, delete')
     models = db.relationship('Model', back_populates='make', cascade='all, delete')
 
+
 class MakeSchema(ma.Schema):
     country = fields.Nested('CountrySchema')
 

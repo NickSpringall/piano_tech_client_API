@@ -14,6 +14,7 @@ class Client(db.Model):
     technician_id = db.Column(db.Integer, db.ForeignKey('technicians.id'))
 
     technician = db.relationship('Technician', back_populates='clients', cascade='all, delete') 
+    client_instruments = db.relationship('ClientInstrument', back_populates='client', cascade='all, delete')
    
 
 class ClientSchema(ma.Schema):

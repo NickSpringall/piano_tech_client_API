@@ -14,6 +14,7 @@ class Model(db.Model):
     type = db.relationship('Type', back_populates='models', cascade='all, delete')
     make = db.relationship('Make', back_populates='models', cascade='all, delete')
     manufacture_country = db.relationship('Country', back_populates='models', cascade='all, delete')
+    client_instruments = db.relationship('ClientInstrument', back_populates='model')
    
 class ModelSchema(ma.Schema):
     type = fields.Nested('TypeSchema')

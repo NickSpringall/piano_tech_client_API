@@ -6,6 +6,9 @@ from models.country import Country
 from models.make import Make
 from models.type import Type
 from models.model import Model
+from models.colour import Colour
+from models.client_instrument import ClientInstrument
+from models.finish import Finish
 
 
 db_commands = Blueprint('db', __name__)
@@ -24,20 +27,20 @@ def drop_db():
 def seed_db():
     technicians = [
         Technician(
-            first_name='James',
-            last_name='Smith',
-            address= '5 smith st, smithville',
-            phone= '0483 293 399',
-            email='james_smith@email.com',
-            password=bcrypt.generate_password_hash('jamessmith').decode('utf-8')
+        first_name='James',
+        last_name='Smith',
+        address= '5 smith st, smithville',
+        phone= '0483 293 399',
+        email='james_smith@email.com',
+        password=bcrypt.generate_password_hash('jamessmith').decode('utf-8')
         ),
         Technician(
-            first_name='Sally',
-            last_name='Ford',
-            address='20 street st, streetville',
-            phone= '0495 438 393',
-            email='sally@email.com',
-            password=bcrypt.generate_password_hash('sallyford').decode('utf-8')
+        first_name='Sally',
+        last_name='Ford',
+        address='20 street st, streetville',
+        phone= '0495 438 393',
+        email='sally@email.com',
+        password=bcrypt.generate_password_hash('sallyford').decode('utf-8')
         )
     ]
 
@@ -53,12 +56,12 @@ def seed_db():
             technician=technicians[0]
         ),
         Client(
-        name='Elsternwick State School',
-        address='4390 St Kilda rd, Elsternwick',
-        phone='03 9283 3933',
-        email='info@ess.gov.edu.au',
-        password=bcrypt.generate_password_hash('ess').decode('utf-8'),
-        technician=technicians[0]
+            name='Elsternwick State School',
+            address='4390 St Kilda rd, Elsternwick',
+            phone='03 9283 3933',
+            email='info@ess.gov.edu.au',
+            password=bcrypt.generate_password_hash('ess').decode('utf-8'),
+            technician=technicians[0]
         )
     ]
 
@@ -106,6 +109,50 @@ def seed_db():
         )
     ]
     db.session.add_all(types)
+
+    colours = [
+        Colour(
+        colour_name = 'Black'
+        ),
+        Colour(
+        colour_name = 'Walnut'
+        ),
+        Colour(
+        colour_name = 'Mahogany'
+        ),
+        Colour(
+        colour_name = 'White'
+        )
+    ]
+    db.session.add_all(colours)
+
+    models = [
+        Model(
+        name = 'C1',
+        type = types[1],
+        make = makes[0],
+        manufacture_country = countries[0]
+        ),
+        Model(
+        name = 'U3',
+        type = types[0],
+        make = makes[0],
+        manufacture_country = countries[0]
+        ),
+        Model(
+        name = 'U1J',
+        type = types[0],
+        make = makes[0],
+        manufacture_country = countries[3]
+        ),
+        Model(
+        name = 'M',
+        type = types[1],
+        make = makes[1],
+        manufacture_country = countries[4]
+        )
+    ]
+    db.session.add_all(models)
 
     db.session.commit()
 
