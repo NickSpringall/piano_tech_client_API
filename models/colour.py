@@ -12,7 +12,7 @@ class Colour(db.Model):
 class ColourSchema(ma.Schema):
 
     class Meta:
-        fields = ('id', 'name')
+        fields = ('id', 'colour_name')
 
 colour_schema = ColourSchema()
 colours_schema = ColourSchema(many=True)

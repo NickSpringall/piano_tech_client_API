@@ -13,5 +13,5 @@ class FinishSchema(ma.Schema):
     client_instruments = fields.Nested('FinishSchema')
 
     class Meta:
-        fields = ('id', 'name', 'client_instruments')
+        fields = ('id', 'name')
 

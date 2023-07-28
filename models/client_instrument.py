@@ -21,7 +21,7 @@ class ClientInstrument(db.Model):
 
 class ClientInstrumentSchema(ma.Schema):
     model = fields.Nested('ModelSchema')
-    client = fields.Nested('ClientSchema')
+    client = fields.Nested('ClientSchema', exclude=['password', 'client_instruments'])
     finish = fields.Nested('FinishSchema')
     colour = fields.Nested('ColourSchema')
 

@@ -175,7 +175,7 @@ def seed_db():
         room = 'music room',
         model = models[2],
         client = clients[0],
-        finish = finishes[0],
+        finish = finishes[1],
         colour = colours[0]
         ),
         ClientInstrument(
