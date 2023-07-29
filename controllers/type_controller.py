@@ -48,7 +48,7 @@ def update_type(id):
         return {'error': f'no type found with id {id}'}, 404
     
     db.session.commit()
-    return type_schema.dump(type)
+    return type_schema.dump(type), 200
 
 
 @type_bp.route ('/<int:id>', methods = ['DELETE'])

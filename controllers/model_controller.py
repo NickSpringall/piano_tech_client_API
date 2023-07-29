@@ -69,7 +69,7 @@ def update_model(id):
     else:
         return {'error': f'no model found with id {id}'}, 404
     db.session.commit()
-    return model_schema.dump(model)
+    return model_schema.dump(model), 200
 
 
 @model_bp.route ('/<int:id>', methods = ['DELETE'])

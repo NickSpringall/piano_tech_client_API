@@ -27,7 +27,7 @@ def create_make():
     stmt = db.select(Make).filter_by(name=make.name)
     make_exists = db.session.scalar(stmt)
     if make_exists:
-        return {"error": "makw already registered"}, 401
+        return {"error": "make already registered"}, 401
     else: 
         db.session.add(make)
         db.session.commit()

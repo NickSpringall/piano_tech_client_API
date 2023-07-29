@@ -18,7 +18,7 @@ def auth_tech_login():
             token = create_access_token(identity=('technician' + str(technician.id)), expires_delta=timedelta(days=1))
             return {'email': technician.email, 'token': token}
         else: 
-            return {'error': 'Incorrect password'}
+            return {'error': 'Incorrect password'}, 401
     else: 
-        return {'error': 'No user with this email'}
+        return {'error': 'No user with this email'}, 401
 

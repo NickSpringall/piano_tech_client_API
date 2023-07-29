@@ -67,7 +67,7 @@ def update_client_details(id):
         return {'error': f'no client found with id {id}'}, 404
     
     db.session.commit()
-    return client_schema_no_pw.dump(client)
+    return client_schema_no_pw.dump(client), 200
     
 
 

@@ -17,7 +17,7 @@ def auth_client_login():
             token = create_access_token(identity=('client' + str(client.id)), expires_delta=timedelta(days=1))
             return {'email': client.email, 'token': token}
         else:
-            return {'error': 'Incorrect password'}
+            return {'error': 'Incorrect password'}, 401
     else:
-        return {'error': 'no user with this email'}
+        return {'error': 'no user with this email'}, 401
 

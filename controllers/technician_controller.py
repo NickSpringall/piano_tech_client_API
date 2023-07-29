@@ -87,7 +87,7 @@ def update_technician_details(id):
             technician.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         except: ValueError
         db.session.commit()
-        return technician_schema_no_pw.dump(technician)
+        return technician_schema_no_pw.dump(technician), 200
     else:
         return {'error': f'no technician found with id {id}'}, 404
     

@@ -37,15 +37,16 @@ def create_app():
         if err.orig.pgcode == errorcodes.STRING_DATA_RIGHT_TRUNCATION:
             return{'error':  err.orig.args}
         else:
-            return{'error': 'something went wrong'}
+            return{'error': err.messages}
 
-    # @app.errorhandler(ValueError)
-    # def value_error(err):
-    #     return {'error': str(err)}
+    @app.errorhandler(ValueError)
+    def value_error(err):
+        return {'error': err.messages}
     
     @app.errorhandler(ValidationError)
     def validation_error(err):
         return {'error': err.messages}
+    
 
     db.init_app(app)
     ma.init_app(app)
