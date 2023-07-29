@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from models.colour import Colour, colours_schema, colour_schema
 from init import db, ma, bcrypt
-from decorators import check_if_technician, check_if_technician_or_logged_in_client
+from decorators import check_if_technician
 
 colour_bp = Blueprint('colours', __name__, url_prefix='/colours')
 
@@ -37,4 +37,26 @@ def create_colour():
 @check_if_technician
 def update_colour(id):
     body_data = request.get_json()
-    colour = Colour
+    stmt = db.select(Colour).filter_by(id=id)
+    colour = db.session.scalar(stmt)
+    if colour:
+        colour.colour_name = body_data.get('colour_name') or colour.colour_name
+    else:
+        return {'error': f'no colour found with id {id}'}, 404
+    
+    db.session.commit()
+    return colour_schema.dump(colour)
+
+
+@colour_bp.route ('/<int:id>', methods = ['DELETE'])
+@jwt_required()
+@check_if_technician
+def delete_colour(id):
+    stmt = db.select(Colour).filter_by(id=id)
+    colour = db.session.scalar(stmt)
+    if colour:
+        db.session.delete(colour)
+        db.session.commit()
+        return {'message': f'colour with id {colour.id} successfully deleted'}, 200
+    else:
+        return {'error': f'no colour found with id {id}'}, 404

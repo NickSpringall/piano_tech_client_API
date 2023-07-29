@@ -9,6 +9,10 @@ from controllers.auth_controllers.tech_auth_controller import auth_technician_bp
 from controllers.auth_controllers.client_auth_controller import client_auth_bp
 from controllers.client_instrument_controller import client_instrument_bp
 from controllers.colour_controller import colour_bp
+from controllers.country_controller import country_bp
+from controllers.finish_controller import finish_bp
+from controllers.make_controller import make_bp
+from controllers.type_controller import type_bp
 
 def create_app():
     app = Flask (__name__)
@@ -32,6 +36,11 @@ def create_app():
     app.register_blueprint(client_auth_bp)
     app.register_blueprint(client_instrument_bp)
     app.register_blueprint(colour_bp)
+    app.register_blueprint(country_bp)
+    app.register_blueprint(finish_bp)
+    app.register_blueprint(make_bp)
+    app.register_blueprint(type_bp)
+
 
     return app
     

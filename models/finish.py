@@ -15,3 +15,6 @@ class FinishSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name')
 
+finish_schema = FinishSchema()
+finishes_schema = FinishSchema(many = True)
+
