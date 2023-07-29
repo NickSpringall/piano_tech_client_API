@@ -11,6 +11,9 @@ model_bp = Blueprint('models', __name__, url_prefix='/models')
 @jwt_required()
 @check_if_technician
 def get_all_models():
+    """
+    returns all model instances on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Model)
     models = db.session.scalars(stmt)
     return models_schema.dump(models), 201
@@ -20,6 +23,9 @@ def get_all_models():
 @jwt_required()
 @check_if_technician
 def get_models_for_make(id):
+    """
+    Returns all model instances for a given make. Takes make_id as dynamic route. Only allows authenticated technician tokens. 
+    """
     stmt = db.select(Make).filter_by(id=id)
     make = db.session.scalar(stmt)
     if make:
@@ -37,6 +43,9 @@ def get_models_for_make(id):
 @jwt_required()
 @check_if_technician
 def create_model():
+    """
+    Creates new model instance. Accepts input of model entities. Requires all non-nullable entities. Returns model instance on success. Only allows authenticated technician tokens. 
+    """
     body_data = model_schema.load(request.get_json())
     model = Model(
         name=body_data.get('name'),
@@ -58,6 +67,9 @@ def create_model():
 @jwt_required()
 @check_if_technician
 def update_model(id):
+    """
+    Updates model data. Dynamic route takes id of model to be updated. Requires input of all entities to be updated and returns selected model instance on success. Only allows authenticated technician tokens.
+    """
     body_data = model_schema.load(request.get_json(), partial=True)
     stmt = db.select(Model).filter_by(id=id)
     model = db.session.scalar(stmt)
@@ -76,6 +88,9 @@ def update_model(id):
 @jwt_required()
 @check_if_technician
 def delete_model(id):
+    """
+    Delete one model instance. Only allows authenticated technician tokens. Dynamic route takes id of model to be deleted. Returns statement of success or failure to find model.
+    """
     stmt = db.select(Model).filter_by(id=id)
     model = db.session.scalar(stmt)
     if model:

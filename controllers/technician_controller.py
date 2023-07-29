@@ -12,6 +12,9 @@ technician_bp = Blueprint('technicians', __name__, url_prefix='/technicians')
 @jwt_required()
 @check_if_technician
 def get_all_technicians():
+    """
+    returns all technician instances on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Technician).order_by(Technician.first_name)
     technicians = db.session.scalars(stmt)
     return technicians_schema_no_pw.dump(technicians), 200
@@ -20,6 +23,9 @@ def get_all_technicians():
 @jwt_required()
 @check_if_technician
 def get_single_technician(id):
+    """
+    Returns a single technician instance. Dynamic route accepts id of technician to be returned. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Technician).filter_by(id=id)
     technician = db.session.scalar(stmt)
     if technician:
@@ -32,6 +38,9 @@ def get_single_technician(id):
 @jwt_required()
 @check_if_technician
 def technician_clients(id):
+    """
+    Returns all clients for a given technician instance. Dynamic route accepts id of technician who's client instances will be returned. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Technician).filter_by(id=id)
     technician = db.session.scalar(stmt)
     if technician:
@@ -45,13 +54,13 @@ def technician_clients(id):
         return {"error": f"technician with id {id} does not exist"}, 404
 
 
-
- 
-
 @technician_bp.route ('<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
 @check_if_technician
 def update_technician_details(id):
+    """
+    Updates one technician instance data. Dynamic route takes id of technician instance to be updated. Requires input of all entities to be updated and returns selected technician instance on success. Only allows authenticated technician tokens.
+    """
     body_data = technician_schema.load(request.get_json(), partial=True)
     stmt = db.select(Technician).filter_by(id=id)
     technician = db.session.scalar(stmt)
@@ -76,6 +85,9 @@ def update_technician_details(id):
 @jwt_required()
 @check_if_technician
 def delete_technician(id):
+    """
+    Delete one technician instance. Only allows authenticated technician tokens. Dynamic route takes id of technician to be deleted. Returns statement of success or failure to find technician.
+    """
     stmt = db.select(Technician).filter_by(id=id)
     technician = db.session.scalar(stmt)
     if technician:

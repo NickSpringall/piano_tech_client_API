@@ -12,7 +12,7 @@ colour_bp = Blueprint('colours', __name__, url_prefix='/colours')
 @check_if_technician
 def get_all_colours():
     """
-    returns all colour instences on database. Takes no input. Only allows authenticated technician tokens.
+    returns all colour instances on database. Takes no input. Only allows authenticated technician tokens.
     """
     stmt = db.select(Colour)
     colours = db.session.scalars(stmt)
@@ -24,7 +24,7 @@ def get_all_colours():
 @check_if_technician
 def create_colour():
     """
-    Creates new colour instence. Expects input of colour_name. Returns colour instence on success. Only allows authenticated technician tokens. 
+    Creates new colour instance. Accepts input of colour_name. Returns colour instance on success. Only allows authenticated technician tokens. 
     """
     body_data = colour_schema.load(request.get_json())
     colour = Colour(
@@ -45,7 +45,7 @@ def create_colour():
 @check_if_technician
 def update_colour(id):
     """
-    Updates colour data. Dynamic route takes id of colour to be updated. Requires input of all entities to be updated and returns selected colour instence on success. Only allows authenticated technician tokens.
+    Updates colour data. Dynamic route takes id of colour to be updated. Requires input of all entities to be updated and returns selected colour instance on success. Only allows authenticated technician tokens.
     """
     body_data = colour_schema.load(request.get_json(), partial=True)
     stmt = db.select(Colour).filter_by(id=id)
@@ -62,7 +62,9 @@ def update_colour(id):
 @jwt_required()
 @check_if_technician
 def delete_colour(id):
-    
+    """
+    Delete one colour instance. Only allows authenticated technician tokens. Dynamic route takes id of colour to be deleted. Returns statement of success or failure to find colour.
+    """
     stmt = db.select(Colour).filter_by(id=id)
     colour = db.session.scalar(stmt)
     if colour:

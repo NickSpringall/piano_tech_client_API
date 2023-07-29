@@ -26,7 +26,7 @@ def get_all_instruments():
 @check_if_technician_or_logged_in_client
 def get_single_clients_instruments(id):
     """
-    returns all data for a single client_instrument, dynamic route takes the id of the client_instrument to be returned. Only allows authenticated technician tokens.
+    Returns all data for a single client_instrument, dynamic route takes the id of the client_instrument to be returned. Only allows authenticated technician tokens.
     """
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)

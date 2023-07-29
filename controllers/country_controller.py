@@ -11,6 +11,9 @@ country_bp = Blueprint('countries', __name__, url_prefix='/countries')
 @jwt_required()
 @check_if_technician
 def get_all_countries():
+    """
+    returns all country instances on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Country)
     countries = db.session.scalars(stmt)
     return countries_schema.dump(countries), 201
@@ -20,6 +23,9 @@ def get_all_countries():
 @jwt_required()
 @check_if_technician
 def create_country():
+    """
+    Creates new country instance. Accepts input of name. Returns country instance on success. Only allows authenticated technician tokens. 
+    """
     body_data = country_schema.load(request.get_json())
     country = Country(
         name=body_data.get('name')
@@ -38,6 +44,9 @@ def create_country():
 @jwt_required()
 @check_if_technician
 def update_country(id):
+    """
+    Updates country data. Dynamic route takes id of country to be updated. Requires input of all entities to be updated and returns selected country instance on success. Only allows authenticated technician tokens.
+    """
     body_data = request.get_json()
     stmt = db.select(Country).filter_by(id=id)
     country = db.session.scalar(stmt)
@@ -53,6 +62,9 @@ def update_country(id):
 @jwt_required()
 @check_if_technician
 def delete_country(id):
+    """
+    Delete one country instance. Only allows authenticated technician tokens. Dynamic route takes id of country to be deleted. Returns statement of success or failure to find country.
+    """
     stmt = db.select(Country).filter_by(id=id)
     country = db.session.scalar(stmt)
     if country:

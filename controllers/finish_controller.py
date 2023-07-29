@@ -11,6 +11,9 @@ finish_bp = Blueprint('finishes', __name__, url_prefix='/finishes')
 @jwt_required()
 @check_if_technician
 def get_all_finishes():
+    """
+    returns all finish instances on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Finish)
     finishes = db.session.scalars(stmt)
     return finishes_schema.dump(finishes), 201
@@ -20,6 +23,9 @@ def get_all_finishes():
 @jwt_required()
 @check_if_technician
 def create_finish():
+    """
+    Creates new finish instance. Accepts input of name. Returns country instance on success. Only allows authenticated technician tokens. 
+    """
     body_data = finish_schema.load(request.get_json())
     finish = Finish(
         name=body_data.get('name')
@@ -38,6 +44,9 @@ def create_finish():
 @jwt_required()
 @check_if_technician
 def update_finish(id):
+    """
+    Updates finish data. Dynamic route takes id of finish to be updated. Requires input of all entities to be updated and returns selected finish instance on success. Only allows authenticated technician tokens.
+    """
     body_data = finish_schema.load(request.get_json(), partial=True)
     stmt = db.select(Finish).filter_by(id=id)
     finish = db.session.scalar(stmt)
@@ -53,6 +62,9 @@ def update_finish(id):
 @jwt_required()
 @check_if_technician
 def delete_finish(id):
+    """
+    Delete one finish instance. Only allows authenticated technician tokens. Dynamic route takes id of finish to be deleted. Returns statement of success or failure to find finish.
+    """
     stmt = db.select(Finish).filter_by(id=id)
     finish = db.session.scalar(stmt)
     if finish:

@@ -11,6 +11,9 @@ type_bp = Blueprint('types', __name__, url_prefix='/types')
 @jwt_required()
 @check_if_technician
 def get_all_types():
+    """
+    returns all type instances on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Type)
     types = db.session.scalars(stmt)
     return types_schema.dump(types), 201
@@ -20,6 +23,9 @@ def get_all_types():
 @jwt_required()
 @check_if_technician
 def create_type():
+     """
+    Creates new type instance. Accepts input of name. Returns type instance on success. Only allows authenticated technician tokens. 
+    """
     body_data = type_schema.load(request.get_json())
     finish = Type(
         name=body_data.get('name')
@@ -39,6 +45,9 @@ def create_type():
 @jwt_required()
 @check_if_technician
 def update_type(id):
+    """
+    Updates one type instance data. Dynamic route takes id of type to be updated. Requires input of all entities to be updated and returns selected type instance on success. Only allows authenticated technician tokens.
+    """
     body_data = type_schema.load(request.get_json(), partial=True)
     stmt = db.select(Type).filter_by(id=id)
     type = db.session.scalar(stmt)
@@ -55,6 +64,9 @@ def update_type(id):
 @jwt_required()
 @check_if_technician
 def delete_type(id):
+    """
+    Delete one type instance. Only allows authenticated technician tokens. Dynamic route takes id of type to be deleted. Returns statement of success or failure to find type.
+    """
     stmt = db.select(Type).filter_by(id=id)
     type = db.session.scalar(stmt)
     if type:

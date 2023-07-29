@@ -11,6 +11,9 @@ make_bp = Blueprint('makes', __name__, url_prefix='/makes')
 @jwt_required()
 @check_if_technician
 def get_all_makes():
+    """
+    returns all make instances on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Make)
     makes = db.session.scalars(stmt)
     return makes_schema.dump(makes), 201
@@ -20,6 +23,9 @@ def get_all_makes():
 @jwt_required()
 @check_if_technician
 def create_make():
+    """
+    Creates new make instance. Accepts input of name. Returns make instance on success. Only allows authenticated technician tokens. 
+    """
     body_data = make_schema.load(request.get_json())
     make = Make(
         name=body_data.get('name')
@@ -38,6 +44,9 @@ def create_make():
 @jwt_required()
 @check_if_technician
 def update_make(id):
+    """
+    Updates make data. Dynamic route takes id of make to be updated. Requires input of all entities to be updated and returns selected make instance on success. Only allows authenticated technician tokens.
+    """
     body_data = make_schema.load(request.get_json(), partial=True)
     stmt = db.select(Make).filter_by(id=id)
     make = db.session.scalar(stmt)
@@ -54,6 +63,9 @@ def update_make(id):
 @jwt_required()
 @check_if_technician
 def delete_make(id):
+    """
+    Delete one make instance. Only allows authenticated technician tokens. Dynamic route takes id of make to be deleted. Returns statement of success or failure to find make.
+    """
     stmt = db.select(Make).filter_by(id=id)
     make = db.session.scalar(stmt)
     if make:
