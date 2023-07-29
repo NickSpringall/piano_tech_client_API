@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from models.client import Client, clients_schema, client_schema
 from init import db, ma, bcrypt
@@ -14,7 +14,7 @@ client_bp = Blueprint('clients', __name__, url_prefix='/clients')
 def get_all_clients():
     stmt = db.select(Client).order_by(Client.name)
     clients = db.session.scalars(stmt)
-    return clients_schema.dump(clients)
+    return clients_schema.dump(clients), 200
 
 
 @client_bp.route ('/<int:id>')
@@ -23,7 +23,10 @@ def get_all_clients():
 def get_single_client(id):
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
-    return client_schema.dump(client)
+    if client:
+        return client_schema.dump(client), 200
+    else:
+        return {'error': 'no client found, please check you have the correct client id'}, 404
 
         
 @client_bp.route ('/', methods = ['POST'])
@@ -41,7 +44,6 @@ def create_client():
     )
     db.session.add(client)
     db.session.commit()
-
     return client_schema.dump(client), 201
 
 

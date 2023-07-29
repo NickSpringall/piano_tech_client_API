@@ -50,7 +50,6 @@ def create_technician():
     else:   
         db.session.add(technician)
         db.session.commit()
-
         return technician_schema.dump(technician), 201
  
 
@@ -72,13 +71,12 @@ def update_technician_details(id):
         try:
             technician.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         except: ValueError
-
         db.session.commit()
         return technician_schema.dump(technician)
     else:
         return {'error': f'no technician found with id {id}'}, 404
     
-    
+
 @technician_bp.route ('<int:id>', methods = ['DELETE'])
 @jwt_required()
 @check_if_technician

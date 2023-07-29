@@ -14,6 +14,7 @@ def get_all_models():
     models = db.session.scalars(stmt)
     return models_schema.dump(models), 201
 
+
 @model_bp.route('/<int:id>')
 @jwt_required()
 @check_if_technician
@@ -41,7 +42,6 @@ def create_model():
     else: 
         db.session.add(model)
         db.session.commit()
-
         return model_schema.dump(model), 201
 
 
@@ -59,9 +59,9 @@ def update_model(id):
         model.manufacturer_country_id = body_data.get('manufacturer_country_id') or model.manufacturer_country_id
     else:
         return {'error': f'no model found with id {id}'}, 404
-    
     db.session.commit()
     return model_schema.dump(model)
+
 
 @model_bp.route ('/<int:id>', methods = ['DELETE'])
 @jwt_required()

@@ -6,6 +6,7 @@ from decorators import check_if_technician
 
 finish_bp = Blueprint('finishes', __name__, url_prefix='/finishes')
 
+
 @finish_bp.route('/')
 @jwt_required()
 @check_if_technician
@@ -13,6 +14,7 @@ def get_all_finishes():
     stmt = db.select(Finish)
     finishes = db.session.scalars(stmt)
     return finishes_schema.dump(finishes), 201
+
 
 @finish_bp.route('/', methods = ['POST'])
 @jwt_required()
@@ -29,8 +31,8 @@ def create_finish():
     else: 
         db.session.add(finish)
         db.session.commit()
-
         return finish_schema.dump(finish), 201
+
 
 @finish_bp.route('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
@@ -43,9 +45,9 @@ def update_finish(id):
         finish.name = body_data.get('name') or finish.name
     else:
         return {'error': f'no finish found with id {id}'}, 404
-    
     db.session.commit()
     return finish_schema.dump(finish)
+
 
 @finish_bp.route ('/<int:id>', methods = ['DELETE'])
 @jwt_required()

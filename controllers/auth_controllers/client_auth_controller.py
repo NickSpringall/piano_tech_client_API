@@ -2,7 +2,6 @@ from flask import Blueprint, request
 from init import db, bcrypt
 from models.client import Client
 from flask_jwt_extended import create_access_token
-from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
 
 client_auth_bp = Blueprint('auth_client', __name__, url_prefix='/auth_client')

@@ -6,8 +6,8 @@ from init import db, ma, bcrypt
 from decorators import check_if_technician, check_if_technician_or_logged_in_client
 
 
-
 client_instrument_bp = Blueprint('client_instruments', __name__, url_prefix='/client_instruments')
+
 
 @client_instrument_bp.route ('/')
 @jwt_required()
@@ -15,16 +15,23 @@ client_instrument_bp = Blueprint('client_instruments', __name__, url_prefix='/cl
 def get_all_instruments():
     stmt = db.select(ClientInstrument).order_by(ClientInstrument.client_id)
     instruments = db.session.scalars(stmt)
-    return client_instruments_schema.dump(instruments)
+    return client_instruments_schema.dump(instruments), 200
 
 
 @client_instrument_bp.route ('/<int:id>')
 @jwt_required()
 @check_if_technician_or_logged_in_client
-def get_single_client_instruments(id):
-    stmt = db.select(ClientInstrument).filter_by(client_id=id)
-    instruments = db.session.scalars(stmt)
-    return client_instruments_schema.dump(instruments)
+def get_single_clients_instruments(id):
+    stmt = db.select(Client).filter_by(id=id)
+    client = db.session.scalar(stmt)
+    if client:
+        stmt = db.select(ClientInstrument).filter_by(client_id=id)
+        instruments = db.session.scalars(stmt)
+        return client_instruments_schema.dump(instruments), 200
+    else:
+        return {'error': 'no client found, please check you have the correct client id'}, 404
+
+
 
 @client_instrument_bp.route ('/<int:id>', methods = ['DELETE'])
 @jwt_required()
@@ -70,6 +77,8 @@ def update_client_instrument(id):
         instrument.client_id = body_data.get('client_id') or instrument.client_id
         instrument.finish_id = body_data.get('finish_id') or instrument.finish_id
         instrument.colour_id = body_data.get('colour_id') or instrument.colour_id
-    db.session.commit()
-    return client_instrument_schema.dump(instrument)
+        db.session.commit()
+        return client_instrument_schema.dump(instrument)
+    else:
+        return {'error': f'no instrument found with id {id}'}
    

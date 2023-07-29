@@ -2,7 +2,6 @@ from flask import Blueprint, request
 from init import db, bcrypt
 from models.technician import Technician
 from flask_jwt_extended import create_access_token
-from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
 
 auth_technician_bp = Blueprint('auth_technician', __name__, url_prefix='/auth_tech')

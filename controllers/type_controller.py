@@ -50,6 +50,7 @@ def update_type(id):
     db.session.commit()
     return type_schema.dump(type)
 
+
 @type_bp.route ('/<int:id>', methods = ['DELETE'])
 @jwt_required()
 @check_if_technician

@@ -6,6 +6,7 @@ from decorators import check_if_technician
 
 country_bp = Blueprint('countries', __name__, url_prefix='/countries')
 
+
 @country_bp.route('/')
 @jwt_required()
 @check_if_technician
@@ -13,6 +14,7 @@ def get_all_countries():
     stmt = db.select(Country)
     countries = db.session.scalars(stmt)
     return countries_schema.dump(countries), 201
+
 
 @country_bp.route('/', methods = ['POST'])
 @jwt_required()
@@ -29,8 +31,8 @@ def create_country():
     else: 
         db.session.add(country)
         db.session.commit()
-
         return country_schema.dump(country), 201
+
 
 @country_bp.route('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
@@ -43,7 +45,6 @@ def update_country(id):
         country.name = body_data.get('name') or country.name
     else:
         return {'error': f'no country found with id {id}'}, 404
-    
     db.session.commit()
     return country_schema.dump(country)
 

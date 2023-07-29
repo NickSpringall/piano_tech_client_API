@@ -6,6 +6,7 @@ from decorators import check_if_technician
 
 colour_bp = Blueprint('colours', __name__, url_prefix='/colours')
 
+
 @colour_bp.route('/')
 @jwt_required()
 @check_if_technician
@@ -13,6 +14,7 @@ def get_all_colours():
     stmt = db.select(Colour)
     colours = db.session.scalars(stmt)
     return colours_schema.dump(colours), 201
+
 
 @colour_bp.route('/', methods = ['POST'])
 @jwt_required()
@@ -29,8 +31,8 @@ def create_colour():
     else: 
         db.session.add(colour)
         db.session.commit()
-
         return colour_schema.dump(colour), 201
+
 
 @colour_bp.route('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
@@ -43,7 +45,6 @@ def update_colour(id):
         colour.colour_name = body_data.get('colour_name') or colour.colour_name
     else:
         return {'error': f'no colour found with id {id}'}, 404
-    
     db.session.commit()
     return colour_schema.dump(colour)
 

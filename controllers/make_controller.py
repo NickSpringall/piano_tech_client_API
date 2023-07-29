@@ -31,7 +31,6 @@ def create_make():
     else: 
         db.session.add(make)
         db.session.commit()
-
         return make_schema.dump(make), 201
 
 
@@ -47,7 +46,6 @@ def update_make(id):
         make.country_id = body_data.get('country_id') or make.country_id
     else:
         return {'error': f'no finish found with id {id}'}, 404
-    
     db.session.commit()
     return make_schema.dump(make)
 
