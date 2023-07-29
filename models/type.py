@@ -1,5 +1,6 @@
 from init import db, ma 
 from marshmallow import fields
+from marshmallow.validate import Regexp, And, Length
 
 class Type(db.Model):
     __tablename__ = 'types'
@@ -11,6 +12,11 @@ class Type(db.Model):
 
 class TypeSchema(ma.Schema):
     models = fields.List(fields.Nested('ModelsSchema'))
+
+    name = fields.String(required=True, validate=And(
+        Length(min=2, error='Title must be at least 2 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
+    ))
 
     class Meta():
         fields = ('id', 'name')
