@@ -1,6 +1,6 @@
 from init import db, ma
 from marshmallow import fields
-from marshmallow.validate import Regexp, And
+from marshmallow.validate import Regexp, And, Length
 
 class ClientInstrument(db.Model):
     __tablename__ = 'client_instruments'
@@ -40,7 +40,15 @@ class ClientInstrumentSchema(ma.Schema):
         Regexp('^[1-9]\d*$', error='only numbers can be used for model_id')
     ))
 
-    room = fields.String(required=True)
+    serial_number = fields.String(validate=And(
+        Length(min=2, error='serial_number must be at least 2 characters long'),
+        Length(max=50, error='serial_number must not be more than 50 characters long')
+    ))
+
+    room = fields.String(required=True, validate=And(
+        Length(min=2, error='room must be at least 2 characters long'),
+        Length(max=100, error='room must not be more than 100 characters long')
+    ))
 
     class Meta:
         fields = ('id', 'room', 'serial_number', 'model', 'client', 'finish', 'colour', 'model_id', 'client_id', 'colour_id', 'finish_id')

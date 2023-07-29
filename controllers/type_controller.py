@@ -23,7 +23,7 @@ def get_all_types():
 @jwt_required()
 @check_if_technician
 def create_type():
-     """
+    """
     Creates new type instance. Accepts input of name. Returns type instance on success. Only allows authenticated technician tokens. 
     """
     body_data = type_schema.load(request.get_json())
