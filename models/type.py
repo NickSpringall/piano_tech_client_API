@@ -15,5 +15,5 @@ class TypeSchema(ma.Schema):
     class Meta():
         fields = ('id', 'name')
 
-tyoe_schema = TypeSchema
+type_schema = TypeSchema
 types_schema = TypeSchema(many=True)

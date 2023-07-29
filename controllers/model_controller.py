@@ -18,7 +18,9 @@ def get_all_models():
 @jwt_required()
 @check_if_technician
 def get_models_for_make(id):
-    stmt = db.select(Model).filter_by(id=id)
+    stmt = db.select(Model).filter_by(make_id=id)
+    models = db.session.scalars(stmt)
+    return models_schema.dump(models)
     
 
 @model_bp.route('/', methods = ['POST'])
@@ -27,9 +29,9 @@ def get_models_for_make(id):
 def create_model():
     body_data = request.get_json()
     model = Model(
-        name=body_data.get('name')
-        type_id=body_data.get('type_id')
-        make_id=body_data.get('make_id')
+        name=body_data.get('name'),
+        type_id=body_data.get('type_id'),
+        make_id=body_data.get('make_id'),
         manufacturer_country_id=body_data.get('manufacture_country_id')
     )
     stmt = db.select(Model).filter_by(name=model.name)
