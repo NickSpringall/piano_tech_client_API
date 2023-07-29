@@ -13,6 +13,7 @@ from controllers.country_controller import country_bp
 from controllers.finish_controller import finish_bp
 from controllers.make_controller import make_bp
 from controllers.type_controller import type_bp
+from controllers.model_controller import model_bp
 
 def create_app():
     app = Flask (__name__)
@@ -40,6 +41,7 @@ def create_app():
     app.register_blueprint(finish_bp)
     app.register_blueprint(make_bp)
     app.register_blueprint(type_bp)
+    app.register_blueprint(model_bp)
 
 
     return app
