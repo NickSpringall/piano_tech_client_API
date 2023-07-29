@@ -173,6 +173,7 @@ def seed_db():
     client_instruments = [
         ClientInstrument(
         room = 'music room',
+        serial_number = '6,238,223',
         model = models[2],
         client = clients[0],
         finish = finishes[1],
@@ -180,6 +181,7 @@ def seed_db():
         ),
         ClientInstrument(
         room = 'music room',
+        serial_number = 'K843223B',
         model = models[2],
         client = clients[0],
         finish = finishes[0],
@@ -187,6 +189,7 @@ def seed_db():
         ),
         ClientInstrument(
         room = 'teaching studio 1',
+        serial_number = 'LU229933',
         model = models[2],
         client = clients[0],
         finish = finishes[1],
@@ -194,6 +197,7 @@ def seed_db():
         ),
         ClientInstrument(
         room = 'drama room',
+        serial_number = '203944',
         model = models[0],
         client = clients[1],
         finish = finishes[3],
@@ -201,6 +205,7 @@ def seed_db():
         ),
         ClientInstrument(
         room = 'theatre',
+        serial_number = '33222ML2',
         model = models[3],
         client = clients[1],
         finish = finishes[1],

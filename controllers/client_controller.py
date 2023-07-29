@@ -30,7 +30,7 @@ def get_single_client(id):
 @jwt_required()
 @check_if_technician
 def create_client():
-    body_data = request.get_json()
+    body_data = client_schema.load(request.get_json())
     client = Client(
         name = body_data.get('name'),
         address = body_data.get('address'),
@@ -49,7 +49,7 @@ def create_client():
 @jwt_required()
 @check_if_technician
 def update_client_details(id):
-    body_data = request.get_json()
+    body_data = client_schema.load(request.get_json())
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
     if client:

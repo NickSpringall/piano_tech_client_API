@@ -1,5 +1,6 @@
 from init import db, ma 
 from marshmallow import fields
+from marshmallow.validate import Regexp, And, Length
 
 class Make(db.Model):
     __tablename__ = 'makes'

@@ -1,5 +1,7 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Regexp, And
+
 
 class Client(db.Model):
     __tablename__ = 'clients'
@@ -21,8 +23,12 @@ class ClientSchema(ma.Schema):
     technician = fields.Nested('TechnicianSchema', exclude=['password', 'clients'])
     client_instruments = fields.List(fields.Nested('ClientInstrumentSchema', exclude=['client']))
 
+    technician_id = fields.String(validate=And(
+        Regexp('^[1-9]\d*$', error='only numbers can be used for technician_id')
+    ))
+
     class Meta:
-        fields = ('id', 'name', 'address', 'phone', 'email', 'technician', 'client_instruments', 'password')
+        fields = ('id', 'name', 'address', 'phone', 'email', 'technician', 'client_instruments', 'password', 'technician_id')
 
 client_schema = ClientSchema(exclude=['password'])
 clients_schema = ClientSchema(many=True, exclude=['password']) 

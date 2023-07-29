@@ -1,5 +1,6 @@
 from init import db, ma 
 from marshmallow import fields
+from marshmallow.validate import Regexp, And, Length
 
 class Colour(db.Model):
     __tablename__ = 'colours'
@@ -10,6 +11,10 @@ class Colour(db.Model):
     client_instruments = db.relationship('ClientInstrument', back_populates='colour', cascade='all, delete')
 
 class ColourSchema(ma.Schema):
+    colour_name = fields.String(required=True, validate=And(
+        Length(min=2, error='Title must be at least 2 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
+    ))
 
     class Meta:
         fields = ('id', 'colour_name')
