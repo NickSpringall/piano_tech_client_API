@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from init import db, bcrypt
-from models.technician import Technician, technician_schema, technicians_schema
-from models.client import Client, clients_schema, client_schema
+from models.technician import Technician, technician_schema, technicians_schema, technician_schema_no_pw, technicians_schema_no_pw
+from models.client import Client, clients_schema, client_schema, clients_schema_no_pw
 from decorators import check_if_technician
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -14,7 +14,7 @@ technician_bp = Blueprint('technicians', __name__, url_prefix='/technicians')
 def get_all_technicians():
     stmt = db.select(Technician).order_by(Technician.first_name)
     technicians = db.session.scalars(stmt)
-    return technicians_schema.dump(technicians)
+    return technicians_schema_no_pw.dump(technicians)
 
 
 @technician_bp.route ('/<int:id>/clients')
@@ -25,7 +25,8 @@ def technician_clients(id):
     technician = db.session.scalar(stmt)
     if technician:
         clients = Client.query.filter_by(technician_id=id)
-        return clients_schema.dump(clients)
+        if clients:
+            return clients_schema_no_pw.dump(clients)
     else:
         return {"error": f"technician with id {id} does not exist"}, 404
 
@@ -50,7 +51,7 @@ def create_technician():
     else:   
         db.session.add(technician)
         db.session.commit()
-        return technician_schema.dump(technician), 201
+        return technician_schema_no_pw.dump(technician), 201
  
 
 @technician_bp.route ('<int:id>', methods = ['PUT', 'PATCH'])
@@ -72,7 +73,7 @@ def update_technician_details(id):
             technician.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         except: ValueError
         db.session.commit()
-        return technician_schema.dump(technician)
+        return technician_schema_no_pw.dump(technician)
     else:
         return {'error': f'no technician found with id {id}'}, 404
     

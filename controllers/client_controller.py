@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
-from models.client import Client, clients_schema, client_schema
+from models.client import Client, client_schema, clients_schema_no_pw, client_schema_no_pw
 from init import db, ma, bcrypt
 from decorators import check_if_technician, check_if_technician_or_logged_in_client
 
@@ -14,7 +14,7 @@ client_bp = Blueprint('clients', __name__, url_prefix='/clients')
 def get_all_clients():
     stmt = db.select(Client).order_by(Client.name)
     clients = db.session.scalars(stmt)
-    return clients_schema.dump(clients), 200
+    return clients_schema_no_pw.dump(clients), 200
 
 
 @client_bp.route ('/<int:id>')
@@ -24,7 +24,7 @@ def get_single_client(id):
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
     if client:
-        return client_schema.dump(client), 200
+        return client_schema_no_pw.dump(client), 200
     else:
         return {'error': 'no client found, please check you have the correct client id'}, 404
 
@@ -44,7 +44,7 @@ def create_client():
     )
     db.session.add(client)
     db.session.commit()
-    return client_schema.dump(client), 201
+    return clients_schema_no_pw.dump(client), 201
 
 
 @client_bp.route ('/<int:id>', methods = ['PUT', 'PATCH'])
@@ -67,7 +67,7 @@ def update_client_details(id):
         return {'error': f'no client found with id {id}'}, 404
     
     db.session.commit()
-    return client_schema.dump(client)
+    return clients_schema_no_pw.dump(client)
     
 
 

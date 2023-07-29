@@ -29,20 +29,20 @@ class TechnicianSchema(ma.Schema):
     ))
     address = fields.String(validate=And(
         Length(min=2, error='name must be at least 2 characters long'),
-        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
     phone = fields.String(validate=And(
         Length(min=2, error='name must be at least 2 characters long'),
-        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
     email = fields.String(required=True, validate=And(
         Length(min=2, error='name must be at least 2 characters long'),
-        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
 
 
     class Meta:
         fields = ('id', 'first_name', 'last_name', 'address', 'phone', 'email', 'password', 'clients')
     
-technician_schema = TechnicianSchema(exclude=['password'])
-technicians_schema = TechnicianSchema(many=True, exclude=['password'])
+technician_schema_no_pw = TechnicianSchema(exclude=['password'])
+technicians_schema_no_pw = TechnicianSchema(many=True, exclude=['password'])
+
+technician_schema = TechnicianSchema()
+technicians_schema = TechnicianSchema(many=True)

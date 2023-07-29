@@ -40,9 +40,7 @@ class ClientInstrumentSchema(ma.Schema):
         Regexp('^[1-9]\d*$', error='only numbers can be used for model_id')
     ))
 
-    room = fields.String(required=True, validate=And(
-        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
-    ))
+    room = fields.String(required=True)
 
     class Meta:
         fields = ('id', 'room', 'serial_number', 'model', 'client', 'finish', 'colour', 'model_id', 'client_id', 'colour_id', 'finish_id')
