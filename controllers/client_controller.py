@@ -12,6 +12,9 @@ client_bp = Blueprint('clients', __name__, url_prefix='/clients')
 @jwt_required()
 @check_if_technician
 def get_all_clients():
+    """
+    returns a list of all clients' data on the database, takes no input. Only allows authenticated technician tokens
+    """
     stmt = db.select(Client).order_by(Client.name)
     clients = db.session.scalars(stmt)
     return clients_schema_no_pw.dump(clients), 200
@@ -21,6 +24,9 @@ def get_all_clients():
 @jwt_required()
 @check_if_technician_or_logged_in_client
 def get_single_client(id):
+    """
+    returns all data for a single client, dynamic route takes the id of the client to be returned. Authenticated technicians can view any client. Authenticated clients can only view their own data
+    """
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
     if client:
@@ -28,29 +34,14 @@ def get_single_client(id):
     else:
         return {'error': 'no client found, please check you have the correct client id'}, 404
 
-        
-@client_bp.route ('/', methods = ['POST'])
-@jwt_required()
-@check_if_technician
-def create_client():
-    body_data = client_schema.load(request.get_json())
-    client = Client(
-        name = body_data.get('name'),
-        address = body_data.get('address'),
-        phone = body_data.get('phone'),
-        email = body_data.get('email'),
-        technician_id = body_data.get('technician_id'),
-        password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')    
-    )
-    db.session.add(client)
-    db.session.commit()
-    return clients_schema_no_pw.dump(client), 201
-
 
 @client_bp.route ('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
 @check_if_technician
 def update_client_details(id):
+    """
+    updates an existing clients' details.  Only allows authenticated technician tokens. Expects input from client of all client fields to be updated and checks them against the schema constraints. On successful registration returns updated and unchanged client data without password.
+    """
     body_data = client_schema.load(request.get_json(), partial=True)
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
@@ -75,6 +66,9 @@ def update_client_details(id):
 @jwt_required()
 @check_if_technician
 def delete_client(id):
+    """
+    delete one client's data. Only allows authenticated technician tokens. Dynamic route takes id of client to be deleted. returns statement of success or failure to find client
+    """
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
     if client:

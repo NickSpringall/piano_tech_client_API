@@ -45,27 +45,7 @@ def technician_clients(id):
         return {"error": f"technician with id {id} does not exist"}, 404
 
 
-@technician_bp.route ('/', methods = ['POST'])
-@jwt_required()
-@check_if_technician
-def create_technician():
-    body_data = technician_schema.load(request.get_json())
-    technician = Technician(
-        first_name=body_data.get('first_name'),
-        last_name=body_data.get('last_name'),
-        address=body_data.get('address'),
-        phone=body_data.get('phone'),
-        email=body_data.get('email'),
-        password=bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
-    )
-    stmt = db.select(Technician). filter_by(email=technician.email)
-    tech_exists = db.session.scalar(stmt)
-    if tech_exists:
-        return {"error": "email already in use"}, 401     
-    else:   
-        db.session.add(technician)
-        db.session.commit()
-        return technician_schema_no_pw.dump(technician), 201
+
  
 
 @technician_bp.route ('<int:id>', methods = ['PUT', 'PATCH'])

@@ -11,6 +11,9 @@ colour_bp = Blueprint('colours', __name__, url_prefix='/colours')
 @jwt_required()
 @check_if_technician
 def get_all_colours():
+    """
+    returns all colour instences on database. Takes no input. Only allows authenticated technician tokens.
+    """
     stmt = db.select(Colour)
     colours = db.session.scalars(stmt)
     return colours_schema.dump(colours), 201
@@ -20,6 +23,9 @@ def get_all_colours():
 @jwt_required()
 @check_if_technician
 def create_colour():
+    """
+    Creates new colour instence. Expects input of colour_name. Returns colour instence on success. Only allows authenticated technician tokens. 
+    """
     body_data = colour_schema.load(request.get_json())
     colour = Colour(
         colour_name=body_data.get('colour_name')
@@ -38,6 +44,9 @@ def create_colour():
 @jwt_required()
 @check_if_technician
 def update_colour(id):
+    """
+    Updates colour data. Dynamic route takes id of colour to be updated. Requires input of all entities to be updated and returns selected colour instence on success. Only allows authenticated technician tokens.
+    """
     body_data = colour_schema.load(request.get_json(), partial=True)
     stmt = db.select(Colour).filter_by(id=id)
     colour = db.session.scalar(stmt)
@@ -53,6 +62,7 @@ def update_colour(id):
 @jwt_required()
 @check_if_technician
 def delete_colour(id):
+    
     stmt = db.select(Colour).filter_by(id=id)
     colour = db.session.scalar(stmt)
     if colour:
