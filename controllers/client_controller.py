@@ -53,16 +53,21 @@ def update_client_details(id):
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
     if client:
-        client.name = body_data('name') or client.name
-        client.address = body_data('address') or client.address
-        client.phone = body_data('phone') or client.phone
-        client.email = body_data('email') or client.email
-        client.technician = body_data('technician') or client.technician
+        client.name = body_data.get('name') or client.name
+        client.address = body_data.get('address') or client.address
+        client.phone = body_data.get('phone') or client.phone
+        client.email = body_data.get('email') or client.email
+        client.technician = body_data.get('technician') or client.technician
         try:
             client.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         except: ValueError
     else:
         return {'error': f'no client found with id {id}'}, 404
+    
+    db.session.commit()
+
+    return client_schema.dump(client)
+    
 
 
 @client_bp.route ('/<int:id>', methods = ['DELETE'])

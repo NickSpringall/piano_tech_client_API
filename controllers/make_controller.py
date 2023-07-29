@@ -6,6 +6,7 @@ from decorators import check_if_technician
 
 make_bp = Blueprint('makes', __name__, url_prefix='/makes')
 
+
 @make_bp.route('/')
 @jwt_required()
 @check_if_technician
@@ -13,6 +14,7 @@ def get_all_makes():
     stmt = db.select(Make)
     makes = db.session.scalars(stmt)
     return makes_schema.dump(makes), 201
+
 
 @make_bp.route('/', methods = ['POST'])
 @jwt_required()
@@ -31,6 +33,7 @@ def create_make():
         db.session.commit()
 
         return make_schema.dump(make), 201
+
 
 @make_bp.route('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()

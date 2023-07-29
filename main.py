@@ -2,6 +2,7 @@ from flask import Flask
 import os
 from init import db, ma, bcrypt, jwt
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow.exceptions import ValidationError
 from controllers.cli_controller import db_commands
 from controllers.client_controller import client_bp
 from controllers.technician_controller import technician_bp
@@ -15,16 +16,33 @@ from controllers.make_controller import make_bp
 from controllers.type_controller import type_bp
 from controllers.model_controller import model_bp
 
+from sqlalchemy.exc import IntegrityError, DataError
+from psycopg2 import errorcodes
+
 def create_app():
     app = Flask (__name__)
 
     app.config.from_object("config.app_config")
     app.config["JWT_SECRET_KEY"]=os.environ.get("JWT_SECRET_KEY")
 
-    @app.route('/')
-    def hello_world():
-        return 'Hello, World!'
-    
+    @app.errorhandler(IntegrityError)
+    def validation_error(err):
+        if err.orig.pgcode == errorcodes.FOREIGN_KEY_VIOLATION:
+            return {'error': f'{err.orig.diag.constraint_name} was not found, please enter a valid id'}
+        elif err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {'error': f'{err.orig.diag.column_name} field cannot be empty'}
+        
+    @app.errorhandler(DataError)
+    def data_error(err):
+        if err.orig.pgcode == errorcodes.STRING_DATA_RIGHT_TRUNCATION:
+            return{'error':  err.orig.args}
+        else:
+            return{'error': 'something went wrong'}
+
+    @app.errorhandler(ValueError)
+    def value_error(err):
+        return {'error': str(err)}
+
     db.init_app(app)
     ma.init_app(app)
     bcrypt.init_app(app)

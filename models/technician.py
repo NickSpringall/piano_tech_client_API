@@ -6,10 +6,10 @@ class Technician(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
-    last_name = db.Column(db.String(100))
+    last_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(100))
     phone = db.Column(db.String(30))
-    email = db.Column(db.String(100))
+    email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String, nullable=False)
 
     clients = db.relationship('Client', back_populates='technician', cascade='all, delete')

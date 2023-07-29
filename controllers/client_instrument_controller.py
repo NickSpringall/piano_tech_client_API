@@ -44,40 +44,37 @@ def delete_client_instrument(id):
 @jwt_required()
 @check_if_technician
 def create_client_instrument():
-    try:
-        body_data = request.get_json()
-        instrument = ClientInstrument(
-            room = body_data.get('room'),
-            model_id = body_data.get('model_id'),
-            client_id = body_data.get('client_id'),
-            finish_id = body_data.get('finish_id'),
-            colour_id = body_data.get('colour_id')
-            )
-        db.session.add(instrument)
-        db.session.commit()
-    except IntegrityError as err:
-        if err.orig.pgcode == errorcodes.FOREIGN_KEY_VIOLATION:
-            return {'error': f'{err.orig.diag.constraint_name} was not found, please enter a valid id'}
-    return client_instrument_schema.dump(instrument), 201
 
+    body_data = request.get_json()
+
+    instrument = ClientInstrument(
+        room = body_data.get('room'),
+        model_id = body_data.get('model_id'),
+        client_id = body_data.get('client_id'),
+        finish_id = body_data.get('finish_id'),
+        colour_id = body_data.get('colour_id')
+        )
+    db.session.add(instrument)
+    db.session.commit()
+
+    return client_instrument_schema.dump(instrument), 201
+    
 
 @client_instrument_bp.route ('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
 @check_if_technician
 def update_client_instrument(id):
-    try:
-        body_data = request.get_json()
-        stmt = db.select(ClientInstrument).filter_by(id=id)
-        instrument = db.session.scalar(stmt)
-        if instrument:
-            instrument.room = body_data.get('room') or instrument.room
-            instrument.model_id = body_data.get('model_id') or instrument.model_id
-            instrument.client_id = body_data.get('client_id') or instrument.client_id
-            instrument.finish_id = body_data.get('finish_id') or instrument.finish_id
-            instrument.colour_id = body_data.get('colour_id') or instrument.colour_id
+   
+    body_data = request.get_json()
+    stmt = db.select(ClientInstrument).filter_by(id=id)
+    instrument = db.session.scalar(stmt)
+    if instrument:
+        instrument.room = body_data.get('room') or instrument.room
+        instrument.model_id = body_data.get('model_id') or instrument.model_id
+        instrument.client_id = body_data.get('client_id') or instrument.client_id
+        instrument.finish_id = body_data.get('finish_id') or instrument.finish_id
+        instrument.colour_id = body_data.get('colour_id') or instrument.colour_id
 
-        db.session.commit()
-        return client_instrument_schema.dump(instrument)
-    except IntegrityError as err:
-        if err.orig.pgcode == errorcodes.FOREIGN_KEY_VIOLATION:
-            return {'error': f'{err.orig.diag.constraint_name} was not found, please enter a valid id'}
+    db.session.commit()
+    return client_instrument_schema.dump(instrument)
+   
