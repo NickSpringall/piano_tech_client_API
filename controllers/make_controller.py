@@ -47,7 +47,7 @@ def update_make(id):
     else:
         return {'error': f'no finish found with id {id}'}, 404
     db.session.commit()
-    return make_schema.dump(make)
+    return make_schema.dump(make), 200
 
 
 @make_bp.route ('/<int:id>', methods = ['DELETE'])

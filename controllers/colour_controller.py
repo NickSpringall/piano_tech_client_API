@@ -46,7 +46,7 @@ def update_colour(id):
     else:
         return {'error': f'no colour found with id {id}'}, 404
     db.session.commit()
-    return colour_schema.dump(colour)
+    return colour_schema.dump(colour), 200
 
 
 @colour_bp.route ('/<int:id>', methods = ['DELETE'])

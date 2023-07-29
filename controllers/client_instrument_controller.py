@@ -78,7 +78,7 @@ def update_client_instrument(id):
         instrument.finish_id = body_data.get('finish_id') or instrument.finish_id
         instrument.colour_id = body_data.get('colour_id') or instrument.colour_id
         db.session.commit()
-        return client_instrument_schema.dump(instrument)
+        return client_instrument_schema.dump(instrument), 200
     else:
-        return {'error': f'no instrument found with id {id}'}
+        return {'error': f'no instrument found with id {id}'}, 404
    

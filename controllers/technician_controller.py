@@ -14,7 +14,18 @@ technician_bp = Blueprint('technicians', __name__, url_prefix='/technicians')
 def get_all_technicians():
     stmt = db.select(Technician).order_by(Technician.first_name)
     technicians = db.session.scalars(stmt)
-    return technicians_schema_no_pw.dump(technicians)
+    return technicians_schema_no_pw.dump(technicians), 200
+
+@technician_bp.route ('/<int:id>')
+@jwt_required()
+@check_if_technician
+def get_single_technician(id):
+    stmt = db.select(Technician).filter_by(id=id)
+    technician = db.session.scalar(stmt)
+    if technician:
+        return technician_schema.dump(technician), 200
+    else:
+        return {'error': 'no client found, please check you have the correct client id'}, 404
 
 
 @technician_bp.route ('/<int:id>/clients')
@@ -24,9 +35,12 @@ def technician_clients(id):
     stmt = db.select(Technician).filter_by(id=id)
     technician = db.session.scalar(stmt)
     if technician:
-        clients = Client.query.filter_by(technician_id=id)
+        clients = technician.clients
         if clients:
-            return clients_schema_no_pw.dump(clients)
+            client_list = Client.query.filter_by(technician_id=id)
+            return clients_schema_no_pw.dump(client_list)
+        else:
+            return {'message': f'technician with id {id} does not have any clients'}, 200
     else:
         return {"error": f"technician with id {id} does not exist"}, 404
 

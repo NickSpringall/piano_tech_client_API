@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from models.model import Model, model_schema, models_schema
+from models.make import Make
 from init import db, ma, bcrypt
 from decorators import check_if_technician
 
@@ -15,15 +16,23 @@ def get_all_models():
     return models_schema.dump(models), 201
 
 
-@model_bp.route('/<int:id>')
+@model_bp.route('/make/<int:id>')
 @jwt_required()
 @check_if_technician
 def get_models_for_make(id):
-    stmt = db.select(Model).filter_by(make_id=id)
-    models = db.session.scalars(stmt)
-    return models_schema.dump(models)
-    
+    stmt = db.select(Make).filter_by(id=id)
+    make = db.session.scalar(stmt)
+    if make:
+        models = make.models
+        if models:
+            models_list = Model.query.filter_by(make_id=id)
+            return models_schema.dump(models_list), 200
+        else:
+            return {'message': f'make with id {id} does not have any models'}, 200
+    else:
+        return {'error': f'make with if {id} does not exist'}, 404
 
+    
 @model_bp.route('/', methods = ['POST'])
 @jwt_required()
 @check_if_technician

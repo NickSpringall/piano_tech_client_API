@@ -46,7 +46,7 @@ def update_country(id):
     else:
         return {'error': f'no country found with id {id}'}, 404
     db.session.commit()
-    return country_schema.dump(country)
+    return country_schema.dump(country), 200
 
 
 @country_bp.route ('/<int:id>', methods = ['DELETE'])

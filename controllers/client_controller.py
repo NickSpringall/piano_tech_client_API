@@ -59,7 +59,7 @@ def update_client_details(id):
         client.address = body_data.get('address') or client.address
         client.phone = body_data.get('phone') or client.phone
         client.email = body_data.get('email') or client.email
-        client.technician = body_data.get('technician') or client.technician
+        client.technician_id = body_data.get('technician_id') or client.technician_id
         try:
             client.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         except: ValueError
@@ -67,7 +67,7 @@ def update_client_details(id):
         return {'error': f'no client found with id {id}'}, 404
     
     db.session.commit()
-    return clients_schema_no_pw.dump(client)
+    return client_schema_no_pw.dump(client)
     
 
 

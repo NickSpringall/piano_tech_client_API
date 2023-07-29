@@ -46,7 +46,7 @@ def update_finish(id):
     else:
         return {'error': f'no finish found with id {id}'}, 404
     db.session.commit()
-    return finish_schema.dump(finish)
+    return finish_schema.dump(finish), 200
 
 
 @finish_bp.route ('/<int:id>', methods = ['DELETE'])
