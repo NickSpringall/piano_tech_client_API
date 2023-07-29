@@ -1,6 +1,6 @@
 from init import db, ma
 from marshmallow import fields
-from marshmallow.validate import Regexp, And
+from marshmallow.validate import Regexp, And, Length
 
 
 class Client(db.Model):
@@ -27,6 +27,11 @@ class ClientSchema(ma.Schema):
         Regexp('^[1-9]\d*$', error='only numbers can be used for technician_id')
     ))
 
+    email = fields.String(required=True, validate=And(
+        Length(min=2, error='name must be at least 2 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
+    ))
+    
     class Meta:
         fields = ('id', 'name', 'address', 'phone', 'email', 'technician', 'client_instruments', 'password', 'technician_id')
 

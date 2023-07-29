@@ -27,7 +27,7 @@ def get_models_for_make(id):
 @jwt_required()
 @check_if_technician
 def create_model():
-    body_data = request.get_json()
+    body_data = model_schema.load(request.get_json())
     model = Model(
         name=body_data.get('name'),
         type_id=body_data.get('type_id'),
@@ -49,7 +49,7 @@ def create_model():
 @jwt_required()
 @check_if_technician
 def update_model(id):
-    body_data = request.get_json()
+    body_data = model_schema.load(request.get_json(), partial=True)
     stmt = db.select(Model).filter_by(id=id)
     model = db.session.scalar(stmt)
     if model:

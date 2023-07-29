@@ -18,7 +18,7 @@ def get_all_colours():
 @jwt_required()
 @check_if_technician
 def create_colour():
-    body_data = request.get_json()
+    body_data = colour_schema.load(request.get_json())
     colour = Colour(
         colour_name=body_data.get('colour_name')
     )
@@ -36,7 +36,7 @@ def create_colour():
 @jwt_required()
 @check_if_technician
 def update_colour(id):
-    body_data = request.get_json()
+    body_data = colour_schema.load(request.get_json(), partial=True)
     stmt = db.select(Colour).filter_by(id=id)
     colour = db.session.scalar(stmt)
     if colour:

@@ -18,7 +18,7 @@ def get_all_countries():
 @jwt_required()
 @check_if_technician
 def create_country():
-    body_data = request.get_json()
+    body_data = country_schema.load(request.get_json())
     country = Country(
         name=body_data.get('name')
     )

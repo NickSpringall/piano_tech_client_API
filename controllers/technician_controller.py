@@ -34,7 +34,7 @@ def technician_clients(id):
 @jwt_required()
 @check_if_technician
 def create_technician():
-    body_data = request.get_json()
+    body_data = technician_schema.load(request.get_json())
     technician = Technician(
         first_name=body_data.get('first_name'),
         last_name=body_data.get('last_name'),
@@ -53,11 +53,12 @@ def create_technician():
 
         return technician_schema.dump(technician), 201
  
+
 @technician_bp.route ('<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
 @check_if_technician
 def update_technician_details(id):
-    body_data = request.get_json()
+    body_data = technician_schema.load(request.get_json(), partial=True)
     stmt = db.select(Technician).filter_by(id=id)
     technician = db.session.scalar(stmt)
     if technician:
@@ -76,6 +77,7 @@ def update_technician_details(id):
         return technician_schema.dump(technician)
     else:
         return {'error': f'no technician found with id {id}'}, 404
+    
     
 @technician_bp.route ('<int:id>', methods = ['DELETE'])
 @jwt_required()

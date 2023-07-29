@@ -18,7 +18,7 @@ def get_all_finishes():
 @jwt_required()
 @check_if_technician
 def create_finish():
-    body_data = request.get_json()
+    body_data = finish_schema.load(request.get_json())
     finish = Finish(
         name=body_data.get('name')
     )
@@ -36,7 +36,7 @@ def create_finish():
 @jwt_required()
 @check_if_technician
 def update_finish(id):
-    body_data = request.get_json()
+    body_data = finish_schema.load(request.get_json(), partial=True)
     stmt = db.select(Finish).filter_by(id=id)
     finish = db.session.scalar(stmt)
     if finish:

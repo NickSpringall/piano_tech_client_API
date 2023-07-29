@@ -20,7 +20,7 @@ def get_all_makes():
 @jwt_required()
 @check_if_technician
 def create_make():
-    body_data = request.get_json()
+    body_data = make_schema.load(request.get_json())
     make = Make(
         name=body_data.get('name')
     )
@@ -39,7 +39,7 @@ def create_make():
 @jwt_required()
 @check_if_technician
 def update_make(id):
-    body_data = request.get_json()
+    body_data = make_schema.load(request.get_json(), partial=True)
     stmt = db.select(Make).filter_by(id=id)
     make = db.session.scalar(stmt)
     if make:

@@ -6,6 +6,7 @@ from decorators import check_if_technician
 
 type_bp = Blueprint('types', __name__, url_prefix='/types')
 
+
 @type_bp.route('/')
 @jwt_required()
 @check_if_technician
@@ -14,11 +15,12 @@ def get_all_types():
     types = db.session.scalars(stmt)
     return types_schema.dump(types), 201
 
+
 @type_bp.route('/', methods = ['POST'])
 @jwt_required()
 @check_if_technician
 def create_type():
-    body_data = request.get_json()
+    body_data = type_schema.load(request.get_json())
     finish = Type(
         name=body_data.get('name')
     )
@@ -32,11 +34,12 @@ def create_type():
 
         return type_schema.dump(finish), 201
 
+
 @type_bp.route('/<int:id>', methods = ['PUT', 'PATCH'])
 @jwt_required()
 @check_if_technician
 def update_type(id):
-    body_data = request.get_json()
+    body_data = type_schema.load(request.get_json(), partial=True)
     stmt = db.select(Type).filter_by(id=id)
     type = db.session.scalar(stmt)
     if type:

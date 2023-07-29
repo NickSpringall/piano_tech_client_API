@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from models.client import Client, clients_schema, client_schema
 from init import db, ma, bcrypt
@@ -49,7 +49,7 @@ def create_client():
 @jwt_required()
 @check_if_technician
 def update_client_details(id):
-    body_data = client_schema.load(request.get_json())
+    body_data = client_schema.load(request.get_json(), partial=True)
     stmt = db.select(Client).filter_by(id=id)
     client = db.session.scalar(stmt)
     if client:
@@ -65,7 +65,6 @@ def update_client_details(id):
         return {'error': f'no client found with id {id}'}, 404
     
     db.session.commit()
-
     return client_schema.dump(client)
     
 

@@ -61,7 +61,7 @@ def create_client_instrument():
 @jwt_required()
 @check_if_technician
 def update_client_instrument(id):
-    body_data = client_instrument_schema.load(request.get_json())
+    body_data = client_instrument_schema.load(request.get_json(), partial=True)
     stmt = db.select(ClientInstrument).filter_by(id=id)
     instrument = db.session.scalar(stmt)
     if instrument:
