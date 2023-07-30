@@ -28,7 +28,8 @@ def create_make():
     """
     body_data = make_schema.load(request.get_json())
     make = Make(
-        name=body_data.get('name')
+        name=body_data.get('name'),
+        country_id = body_data.get('country_id')
     )
     stmt = db.select(Make).filter_by(name=make.name)
     make_exists = db.session.scalar(stmt)

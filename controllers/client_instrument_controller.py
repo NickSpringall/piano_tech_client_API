@@ -8,7 +8,6 @@ from decorators import check_if_technician, check_if_technician_or_logged_in_cli
 
 client_instrument_bp = Blueprint('client_instruments', __name__, url_prefix='/client_instruments')
 
-
 @client_instrument_bp.route ('/')
 @jwt_required()
 @check_if_technician
@@ -21,7 +20,7 @@ def get_all_instruments():
     return client_instruments_schema.dump(instruments), 200
 
 
-@client_instrument_bp.route ('/<int:id>')
+@client_instrument_bp.route ('/client/<int:id>')
 @jwt_required()
 @check_if_technician_or_logged_in_client
 def get_single_clients_instruments(id):

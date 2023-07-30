@@ -3,10 +3,10 @@ from flask_jwt_extended import jwt_required
 from models.client import Client, client_schema, clients_schema_no_pw, client_schema_no_pw
 from init import db, ma, bcrypt
 from decorators import check_if_technician, check_if_technician_or_logged_in_client
+from .client_instrument_controller import client_instrument_bp
 
 
 client_bp = Blueprint('clients', __name__, url_prefix='/clients')
-
 
 @client_bp.route ('/')
 @jwt_required()
@@ -20,7 +20,7 @@ def get_all_clients():
     return clients_schema_no_pw.dump(clients), 200
 
 
-@client_bp.route ('/<int:id>')
+@client_bp.route ('<int:id>')
 @jwt_required()
 @check_if_technician_or_logged_in_client
 def get_single_client(id):
