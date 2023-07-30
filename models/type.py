@@ -6,7 +6,7 @@ class Type(db.Model):
     __tablename__ = 'types'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
+    name = db.Column(db.String(30))
 
     models = db.relationship('Model', back_populates='type', cascade='all, delete')
 
@@ -14,7 +14,8 @@ class TypeSchema(ma.Schema):
     models = fields.List(fields.Nested('ModelsSchema'))
 
     name = fields.String(required=True, validate=And(
-        Length(min=2, error='Title must be at least 2 characters long'),
+        Length(min=2, error='name must be at least 2 characters long'),
+        Length(max=30, error='name must be no more than 30 characters long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
 

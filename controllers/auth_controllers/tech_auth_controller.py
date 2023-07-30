@@ -12,6 +12,9 @@ auth_technician_bp = Blueprint('auth_technician', __name__, url_prefix='/auth_te
 @jwt_required()
 @check_if_technician
 def create_technician():
+    """
+    create new technician user. Only allows authenticated technician tokens. Accepts all fields for Technician model. Requires all non nullable fields. Returns new client instance without password.
+    """
     body_data = technician_schema.load(request.get_json())
     technician = Technician(
         first_name=body_data.get('first_name'),
@@ -33,6 +36,9 @@ def create_technician():
 
 @auth_technician_bp.route('/login', methods=['POST'])
 def auth_tech_login():
+    """
+    Login for technician. Requires email and non encrypted password of technician. Returns technician email and token.
+    """
     body_data = request.get_json()
 
     stmt = db.select(Technician).filter_by(email=body_data.get('email'))

@@ -1,6 +1,6 @@
 from init import db, ma 
 from marshmallow import fields
-from marshmallow.validate import Regexp, And, Length
+from marshmallow.validate import Regexp, And, Length, Range
 
 class Make(db.Model):
     __tablename__ = 'makes'
@@ -18,11 +18,12 @@ class MakeSchema(ma.Schema):
     country = fields.Nested('CountrySchema')
 
     name = fields.String(required=True, validate=And(
-        Length(min=2, error='Title must be at least 2 characters long'),
+        Length(min=2, error='name must be at least 2 characters long'),
+        Length(max=50, error='name must be no more than 50 characters long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
-    country_id = fields.String(validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for country_id')
+    country_id = fields.Integer(validate=And(
+        Range(min=1, max=100000, error='technician_id must not be less than 0 greater than 100,000')
     ))
 
     class Meta:

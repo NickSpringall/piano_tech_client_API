@@ -41,7 +41,7 @@ def create_app():
 
     @app.errorhandler(ValueError)
     def value_error(err):
-        return {'error': err.messages}
+        return {'error': str(err)}
     
     @app.errorhandler(ValidationError)
     def validation_error(err):

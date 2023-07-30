@@ -13,7 +13,7 @@ client_bp = Blueprint('clients', __name__, url_prefix='/clients')
 @check_if_technician
 def get_all_clients():
     """
-    returns a list of all clients' data on the database, takes no input. Only allows authenticated technician tokens
+    returns a list of all clients' data on the database, takes no input. Only allows authenticated technician tokens.
     """
     stmt = db.select(Client).order_by(Client.name)
     clients = db.session.scalars(stmt)

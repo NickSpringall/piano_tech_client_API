@@ -1,12 +1,11 @@
 from init import db, ma 
 from marshmallow import fields
-from marshmallow.validate import Regexp, And, Length
-
+from marshmallow.validate import Regexp, And, Length, Range
 class Model(db.Model):
     __tablename__ = 'models'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
 
     type_id = db.Column(db.Integer, db.ForeignKey('types.id'), nullable=False)
     make_id = db.Column(db.Integer, db.ForeignKey('makes.id'), nullable=False)
@@ -24,16 +23,17 @@ class ModelSchema(ma.Schema):
 
     name = fields.String(required=True, validate=And(
         Length(min=2, error='name must be at least 2 characters long'),
+        Length(max=50, error='name must be no more than 50 characters long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
-    type_id = fields.String(required=True,validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for technician_id')
+    type_id = fields.Integer(required=True, validate=And(
+        Range(min=1, max=100000, error='type_id must not be less than 0 greater than 100,000')
     ))
-    make_id = fields.String(required=True,validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for technician_id')
+    make_id = fields.Integer(required=True, validate=And(
+        Range(min=1, max=100000, error='type_id must not be less than 0 greater than 100,000')
     ))
-    manufacture_country_id = fields.String(validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for technician_id')
+    manufacture_country_id = fields.Integer(validate=And(
+        Range(min=1, max=100000, error='manufacture_country_id must not be less than 0 greater than 100,000')
     ))
 
 

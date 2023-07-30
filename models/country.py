@@ -15,7 +15,7 @@ class CountrySchema(ma.Schema):
     makes = fields.List(fields.Nested('MakesSchema'))
 
     name = fields.String(required=True, validate=And(
-        Length(min=2, error='Title must be at least 2 characters long'),
+        Length(min=3, error='Title must be at least 3 characters long'),
         Regexp('^[a-zA-Z0-9 ]+$', error='only letters, spaces and numbers allowed')
     ))
 

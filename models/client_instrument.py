@@ -1,12 +1,12 @@
 from init import db, ma
 from marshmallow import fields
-from marshmallow.validate import Regexp, And, Length
+from marshmallow.validate import Regexp, And, Length, Range
 
 class ClientInstrument(db.Model):
     __tablename__ = 'client_instruments'
 
     id = db.Column(db.Integer, primary_key=True)
-    room = db.Column(db.String(100))
+    room = db.Column(db.String(50))
     serial_number = db.Column(db.String(50))
 
     model_id = db.Column(db.Integer, db.ForeignKey('models.id'), nullable=False)
@@ -27,27 +27,28 @@ class ClientInstrumentSchema(ma.Schema):
     finish = fields.Nested('FinishSchema')
     colour = fields.Nested('ColourSchema')
 
-    model_id = fields.String(required=True, validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for model_id')
+    model_id = fields.Integer(validate=And(
+        Range(min=1, max=100000, error='model_id must not be less than 0 greater than 100,000')
     ))
-    client_id = fields.String(required=True, validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for model_id')
+    client_id = fields.Integer(validate=And(
+        Range(min=1, max=100000, error='client_id must not be less than 0 greater than 100,000')
     ))
-    finish_id = fields.String(validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for model_id')
+    finish_id = fields.Integer(validate=And(
+        Range(min=1, max=100000, error='finish_id must not be less than 0 greater than 100,000')
     ))
-    colour_id = fields.String(validate=And(
-        Regexp('^[1-9]\d*$', error='only numbers can be used for model_id')
+    colour_id = fields.Integer(validate=And(
+        Range(min=1, max=100000, error='colour_id must not be less than 0 greater than 100,000')
     ))
 
     serial_number = fields.String(validate=And(
-        Length(min=2, error='serial_number must be at least 2 characters long'),
+        Length(min=3, error='serial_number must be at least 3 characters long'),
         Length(max=50, error='serial_number must not be more than 50 characters long')
     ))
 
     room = fields.String(required=True, validate=And(
-        Length(min=2, error='room must be at least 2 characters long'),
-        Length(max=100, error='room must not be more than 100 characters long')
+        Length(min=3, error='room must be at least 3 characters long'),
+        Length(max=50, error='room must not be more than 100 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='Only letters, spaces and numbers allowed')
     ))
 
     class Meta:

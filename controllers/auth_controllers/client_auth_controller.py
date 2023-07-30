@@ -12,6 +12,9 @@ client_auth_bp = Blueprint('auth_client', __name__, url_prefix='/auth_client')
 @jwt_required()
 @check_if_technician
 def create_client():
+    """
+    create new client user. Only allows authenticated technician tokens. Accepts all fields for Client model. Requires all non nullable fields. Returns new technician instance without password.
+    """
     body_data = client_schema.load(request.get_json())
     client = Client(
         name = body_data.get('name'),
@@ -33,6 +36,9 @@ def create_client():
 
 @client_auth_bp.route('/login', methods=['POST'])
 def auth_client_login():
+    """
+    Login for client. Requires email and non encrypted password of client. Returns client email and token.
+    """
     body_data = request.get_json()
 
     stmt = db.select(Client).filter_by(email=body_data.get('email'))
